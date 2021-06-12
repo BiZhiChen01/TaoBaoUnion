@@ -4,6 +4,8 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +21,7 @@ import com.chen.taobaounion.model.bean.HomeCategoryContent;
 import com.chen.taobaounion.presenter.ICategoryPagerPresenter;
 import com.chen.taobaounion.presenter.impl.CategoryPagePresenterImpl;
 import com.chen.taobaounion.ui.adapter.HomePagerContentAdapter;
+import com.chen.taobaounion.ui.custom.TbNestedScrollView;
 import com.chen.taobaounion.utils.Constants;
 import com.chen.taobaounion.utils.LogUtils;
 import com.chen.taobaounion.utils.ToastUtils;
@@ -64,6 +67,12 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
     public TextView currentCategoryTitleTv;
     @BindView(R.id.home_pager_refresh)
     public TwinklingRefreshLayout mTwinklingRefreshLayout;
+    @BindView(R.id.home_pager_parent)
+    public LinearLayout mHomePagerParent;
+    @BindView(R.id.home_pager_nested_scroller)
+    public TbNestedScrollView mHomePagerNestedScroller;
+    @BindView(R.id.home_pager_header_container)
+    public LinearLayout mHomePagerHeaderContainer;
 
     private Boolean loaderMore = false;
     private Boolean refreshMore = false;
@@ -114,6 +123,22 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
                 if (mCategoryPagePresenter != null) {
                     refreshMore = true;
                     mCategoryPagePresenter.loaderMore(mMaterialId);
+                }
+            }
+        });
+
+        mHomePagerParent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int headerHeight = mHomePagerHeaderContainer.getMeasuredHeight();
+                mHomePagerNestedScroller.setHeaderHeight(headerHeight);
+
+                int measuredHeight = mHomePagerParent.getMeasuredHeight();
+                LinearLayout.LayoutParams contentListLayoutParams = (LinearLayout.LayoutParams) mContentList.getLayoutParams();
+                contentListLayoutParams.height = measuredHeight;
+                mContentList.setLayoutParams(contentListLayoutParams);
+                if (measuredHeight != 0) {
+                    mHomePagerParent.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
             }
         });

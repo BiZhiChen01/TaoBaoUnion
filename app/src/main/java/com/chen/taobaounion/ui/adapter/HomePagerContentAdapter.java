@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.chen.taobaounion.R;
 import com.chen.taobaounion.model.bean.HomeCategoryContent;
+import com.chen.taobaounion.utils.LogUtils;
 import com.chen.taobaounion.utils.UrlUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +38,7 @@ public class HomePagerContentAdapter extends RecyclerView.Adapter<HomePagerConte
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull InnerHolder holder, int position) {
+        LogUtils.d(this, "onBindViewHolder === > " + position);
         HomeCategoryContent.DataBean dataBean = mData.get(position);
         holder.setData(dataBean);
     }
