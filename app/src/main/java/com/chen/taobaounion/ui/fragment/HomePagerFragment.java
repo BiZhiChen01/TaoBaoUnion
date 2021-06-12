@@ -33,6 +33,7 @@ import com.youth.banner.adapter.BannerImageAdapter;
 import com.youth.banner.config.IndicatorConfig;
 import com.youth.banner.holder.BannerImageHolder;
 import com.youth.banner.indicator.CircleIndicator;
+import com.youth.banner.transformer.DepthPageTransformer;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -187,13 +188,17 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
                 .setAdapter(new BannerImageAdapter<HomeCategoryContent.DataBean>(contents) {
                     @Override
                     public void onBindView(BannerImageHolder holder, HomeCategoryContent.DataBean data, int position, int size) {
-                        Glide.with(getContext()).load(UrlUtils.getCoverPath(contents.get(position).getPict_url())).into(holder.imageView);
+                        int measuredHeight = holder.imageView.getMeasuredHeight();
+                        int measuredWidth = holder.imageView.getMeasuredWidth();
+                        int coverSize = (measuredWidth > measuredHeight ? measuredWidth : measuredHeight) / 2;
+                        Glide.with(getContext()).load(UrlUtils.getCoverPath(contents.get(position).getPict_url(), coverSize)).into(holder.imageView);
                     }
                 })
                 .setIndicatorSelectedColor(getContext().getColor(R.color.color_main))
                 .setIndicatorNormalColor(getContext().getColor(R.color.white))
                 .setIndicatorMargins(new IndicatorConfig.Margins(20))
-                .setIndicatorWidth(18, 18);
+                .setIndicatorWidth(18, 18)
+                .setPageTransformer(new DepthPageTransformer());
     }
 
     @Override

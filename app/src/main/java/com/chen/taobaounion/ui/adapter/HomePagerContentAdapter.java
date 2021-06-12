@@ -87,7 +87,12 @@ public class HomePagerContentAdapter extends RecyclerView.Adapter<HomePagerConte
             Integer couponAmount = dataBean.getCoupon_amount();
             float resultPrice = Float.parseFloat(finalPrice) - couponAmount;
 
-            Glide.with(itemView.getContext()).load(UrlUtils.getCoverPath(dataBean.getPict_url())).into(cover);
+            ViewGroup.LayoutParams coverLayoutParams = cover.getLayoutParams();
+            int width = coverLayoutParams.width;
+            int height = coverLayoutParams.height;
+            int coverSize = width > height ? width : height;
+
+            Glide.with(itemView.getContext()).load(UrlUtils.getCoverPath(dataBean.getPict_url(), coverSize)).into(cover);
             title.setText(dataBean.getTitle());
             afterOffPriceTv.setText(String.format("%.2f", resultPrice));
             offPriceTv.setText(String.format(itemView.getContext().getString(R.string.text_goods_off_price), couponAmount));
