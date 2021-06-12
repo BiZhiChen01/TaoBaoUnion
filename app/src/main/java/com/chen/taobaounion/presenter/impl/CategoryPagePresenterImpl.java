@@ -22,6 +22,7 @@ import retrofit2.Retrofit;
 public class CategoryPagePresenterImpl implements ICategoryPagerPresenter {
 
     private static ICategoryPagerPresenter sInstance = null;
+    private Integer mCurrentPage;
 
     public static ICategoryPagerPresenter getInstance() {
         if (sInstance == null) {
@@ -44,16 +45,12 @@ public class CategoryPagePresenterImpl implements ICategoryPagerPresenter {
                 callback.onLoading();
             }
         }
-        Retrofit retrofit = RetrofitManager.getInstance().getRetrofit();
-        Api api = retrofit.create(Api.class);
         Integer targetPage = pagesInfo.get(id);
         if (targetPage == null) {
             targetPage = DEFAULT_PAGE;
             pagesInfo.put(id, DEFAULT_PAGE);
         }
-        String homeCategoryContentUrl = UrlUtils.createHomeCategoryContentUrl(id, targetPage);
-        LogUtils.d(this, "home pager url === > " + homeCategoryContentUrl);
-        Call<HomeCategoryContent> task = api.getHomeCategoryContent(homeCategoryContentUrl);
+        Call<HomeCategoryContent> task = createTask(id, targetPage);
         task.enqueue(new Callback<HomeCategoryContent>() {
             @Override
             public void onResponse(Call<HomeCategoryContent> call, Response<HomeCategoryContent> response) {
@@ -74,6 +71,14 @@ public class CategoryPagePresenterImpl implements ICategoryPagerPresenter {
                 handleNetworError(id);
             }
         });
+    }
+
+    private Call<HomeCategoryContent> createTask(int id, Integer targetPage) {
+        Retrofit retrofit = RetrofitManager.getInstance().getRetrofit();
+        Api api = retrofit.create(Api.class);
+        String homeCategoryContentUrl = UrlUtils.createHomeCategoryContentUrl(id, targetPage);
+        Call<HomeCategoryContent> task = api.getHomeCategoryContent(homeCategoryContentUrl);
+        return task;
     }
 
     private void handleNetworError(int id) {
@@ -101,7 +106,53 @@ public class CategoryPagePresenterImpl implements ICategoryPagerPresenter {
 
     @Override
     public void loaderMore(int id) {
+        mCurrentPage = pagesInfo.get(id);
+        if (pagesInfo == null) {
+            mCurrentPage = 1;
+        }
+        mCurrentPage ++;
+        pagesInfo.put(id, mCurrentPage);
+        Call<HomeCategoryContent> task = createTask(id, mCurrentPage);
+        task.enqueue(new Callback<HomeCategoryContent>() {
+            @Override
+            public void onResponse(Call<HomeCategoryContent> call, Response<HomeCategoryContent> response) {
+                int code = response.code();
+                LogUtils.d(CategoryPagePresenterImpl.this, "result code === > " + code);
+                if (code == HttpURLConnection.HTTP_OK) {
+                    HomeCategoryContent result = response.body();
+                    LogUtils.d(CategoryPagePresenterImpl.this, "result === > " + result.toString());
+                    handleLoaderResult(result, id);
+                } else {
+                    handleLoaderMoreError(id);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<HomeCategoryContent> call, Throwable t) {
+                LogUtils.d(CategoryPagePresenterImpl.this, "onFailure === > " + t.toString());
+                handleLoaderMoreError(id);
+            }
+        });
+    }
+
+    private void handleLoaderResult(HomeCategoryContent result, int id) {
+        for (ICategoryPagerCallback callback : mCallbacks) {
+            if (result == null || result.getData().size() == 0) {
+                callback.onLoaderMoreEmpty();
+            } else {
+                callback.onLoaderMoreLoaded(result.getData());
+            }
+        }
+    }
+
+    private void handleLoaderMoreError(int id) {
+        mCurrentPage --;
+        pagesInfo.put(id, mCurrentPage);
+        for (ICategoryPagerCallback callback : mCallbacks) {
+            if (callback.getCategoryId() == id) {
+                callback.onLoaderMoreError();
+            }
+        }
     }
 
     @Override

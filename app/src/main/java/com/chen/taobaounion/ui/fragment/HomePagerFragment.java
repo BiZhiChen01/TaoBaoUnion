@@ -21,8 +21,13 @@ import com.chen.taobaounion.presenter.impl.CategoryPagePresenterImpl;
 import com.chen.taobaounion.ui.adapter.HomePagerContentAdapter;
 import com.chen.taobaounion.utils.Constants;
 import com.chen.taobaounion.utils.LogUtils;
+import com.chen.taobaounion.utils.ToastUtils;
 import com.chen.taobaounion.utils.UrlUtils;
 import com.chen.taobaounion.view.ICategoryPagerCallback;
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.lcodecore.tkrefreshlayout.footer.LoadingView;
+import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout;
 import com.youth.banner.Banner;
 import com.youth.banner.adapter.BannerImageAdapter;
 import com.youth.banner.config.IndicatorConfig;
@@ -56,6 +61,11 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
     public Banner mBanner;
     @BindView(R.id.home_pager_title)
     public TextView currentCategoryTitleTv;
+    @BindView(R.id.home_pager_refresh)
+    public TwinklingRefreshLayout mTwinklingRefreshLayout;
+
+    private Boolean loaderMore = false;
+    private Boolean refreshMore = false;
 
     @Override
     protected int getRootViewResId() {
@@ -74,12 +84,38 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
         });
         mContentAdapter = new HomePagerContentAdapter();
         mContentList.setAdapter(mContentAdapter);
+        mTwinklingRefreshLayout.setEnableRefresh(true);
+        mTwinklingRefreshLayout.setEnableLoadmore(true);
+        mTwinklingRefreshLayout.setHeaderView(new ProgressLayout(getContext()));
+        mTwinklingRefreshLayout.setFloatRefresh(true);
+        mTwinklingRefreshLayout.setBottomView(new LoadingView(getContext()));
     }
 
     @Override
     protected void initPresenter() {
         mCategoryPagePresenter = CategoryPagePresenterImpl.getInstance();
         mCategoryPagePresenter.registerCallback(this);
+    }
+
+    @Override
+    protected void initListener() {
+        mTwinklingRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
+            @Override
+            public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
+                if (mCategoryPagePresenter != null) {
+                    loaderMore = true;
+                    mCategoryPagePresenter.loaderMore(mMaterialId);
+                }
+            }
+
+            @Override
+            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
+                if (mCategoryPagePresenter != null) {
+                    refreshMore = true;
+                    mCategoryPagePresenter.loaderMore(mMaterialId);
+                }
+            }
+        });
     }
 
     @Override
@@ -120,17 +156,27 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
 
     @Override
     public void onLoaderMoreLoaded(List<HomeCategoryContent.DataBean> contents) {
-
+        if (mTwinklingRefreshLayout != null) {
+            if (loaderMore) {
+                mContentAdapter.addLoadedData(contents);
+                mTwinklingRefreshLayout.finishLoadmore();
+                loaderMore = false;
+            } else if (refreshMore) {
+                mContentAdapter.addRefreshData(contents);
+                mTwinklingRefreshLayout.finishRefreshing();
+                refreshMore = false;
+            }
+        }
     }
 
     @Override
     public void onLoaderMoreError() {
-
+        ToastUtils.showToast("网络异常，请稍后重试...");
     }
 
     @Override
     public void onLoaderMoreEmpty() {
-
+        ToastUtils.showToast("没有更多的商品了...");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

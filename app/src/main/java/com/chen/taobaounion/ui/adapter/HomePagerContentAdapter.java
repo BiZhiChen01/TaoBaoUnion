@@ -52,6 +52,16 @@ public class HomePagerContentAdapter extends RecyclerView.Adapter<HomePagerConte
         notifyDataSetChanged();
     }
 
+    public void addLoadedData(List<HomeCategoryContent.DataBean> contents) {
+        mData.addAll(contents);
+        notifyItemRangeChanged(mData.size(), contents.size());
+    }
+
+    public void addRefreshData(List<HomeCategoryContent.DataBean> contents) {
+        mData.addAll(0, contents);
+        notifyItemRangeChanged(0, contents.size());
+    }
+
     public class InnerHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.goods_cover)
