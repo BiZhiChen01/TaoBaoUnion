@@ -9,12 +9,13 @@
     <FrameLayout
         android:id="@+id/main_page_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="49dp"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/main_nav_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="49dp"
         android:layout_alignParentBottom="true"
         app:menu="@menu/my_navigation_items"
         app:itemTextColor="@drawable/nav_bar_color"

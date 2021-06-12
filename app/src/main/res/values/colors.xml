@@ -12,4 +12,6 @@
     <color name="color_grey">#7B7B7B</color>
     <color name="color_tab_selected">#FFFFFF</color>
     <color name="color_tab_normal">#aaFFFFFF</color>
+    <color name="color_tmall">#D0021B</color>
+    <color name="color_page_bg">#EFEEEE</color>
 </resources>
