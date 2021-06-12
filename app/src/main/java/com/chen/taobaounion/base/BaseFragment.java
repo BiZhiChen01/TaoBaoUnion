@@ -11,20 +11,22 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.chen.taobaounion.R;
+import com.chen.taobaounion.utils.LogUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public abstract class BaseFragment extends Fragment {
+
+    public enum State { NONE, LOADING, SUCCESS, ERROR, EMPTY }
 
     private View mLoadingView;
     private View mSuccessView;
     private View mErrorView;
     private View mEmptyView;
-
-    public enum State { NONE, LOADING, SUCCESS, ERROR, EMPTY }
     private State currentState = State.NONE;
 
     private Unbinder mBind;
@@ -100,6 +102,15 @@ public abstract class BaseFragment extends Fragment {
      */
     protected View loadErrorView(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.fragment_error, container, false);
+    }
+
+    @OnClick(R.id.network_error_tips)
+    public void retry() {
+        //点击了重新加载内容
+        LogUtils.d(this, "on retry ...");
+        onRetryClick();
+    }
+    protected void onRetryClick() {
     }
 
     /**

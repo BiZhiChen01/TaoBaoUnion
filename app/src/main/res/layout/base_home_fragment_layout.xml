@@ -27,7 +27,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:paddingLeft="10dp"
-            android:hint="搜你想搜...宝贝"
+            android:hint="@string/text_search_tips"
             android:textSize="12sp"
             android:background="@drawable/shape_home_edit"
             android:focusable="false"/>
