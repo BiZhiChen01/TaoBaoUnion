@@ -34,7 +34,7 @@ public abstract class BaseFragment extends Fragment {
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.base_fragment_layout, container, false);
+        View rootView = loadRootView(inflater, container);
         mBaseContainer = rootView.findViewById(R.id.base_content);
         loadStatesView(inflater, container);
         mBind = ButterKnife.bind(this, rootView);
@@ -42,6 +42,10 @@ public abstract class BaseFragment extends Fragment {
         initPresenter();
         loadData();
         return rootView;
+    }
+
+    protected View loadRootView(LayoutInflater inflater, ViewGroup container) {
+        return inflater.inflate(R.layout.base_fragment_layout, container, false);
     }
 
     /**
