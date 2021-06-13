@@ -1,7 +1,7 @@
 package com.chen.taobaounion.presenter.impl;
 
 import com.chen.taobaounion.model.Api;
-import com.chen.taobaounion.model.bean.TicketParams;
+import com.chen.taobaounion.model.TicketParams;
 import com.chen.taobaounion.model.bean.TicketResult;
 import com.chen.taobaounion.presenter.ITicketPresenter;
 import com.chen.taobaounion.utils.LogUtils;

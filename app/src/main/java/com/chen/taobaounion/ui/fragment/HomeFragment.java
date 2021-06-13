@@ -8,7 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.chen.taobaounion.R;
 import com.chen.taobaounion.base.BaseFragment;
-import com.chen.taobaounion.model.bean.Categories;
+import com.chen.taobaounion.model.bean.HomeCategories;
 import com.chen.taobaounion.presenter.IHomePresenter;
 import com.chen.taobaounion.ui.adapter.HomePagerAdapter;
 import com.chen.taobaounion.utils.PresenterManager;
@@ -60,11 +60,11 @@ public class HomeFragment extends BaseFragment implements IHomeCallback {
     }
 
     @Override
-    public void onCategoriesLoaded(Categories categories) {
+    public void onCategoriesLoaded(HomeCategories homeCategories) {
         //得到分类数据
         setUpState(State.SUCCESS);
         if (mHomePresenter != null) {
-            mHomePagerAdapter.setCategories(categories);
+            mHomePagerAdapter.setCategories(homeCategories);
         }
     }
 

@@ -1,4 +1,4 @@
-package com.chen.taobaounion.model.bean;
+package com.chen.taobaounion.model;
 
 public class TicketParams {
     public TicketParams(String title, String url) {

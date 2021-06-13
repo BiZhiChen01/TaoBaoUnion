@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.chen.taobaounion.model.bean.Categories;
+import com.chen.taobaounion.model.bean.HomeCategories;
 import com.chen.taobaounion.ui.fragment.HomePagerFragment;
 
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class HomePagerAdapter extends FragmentPagerAdapter {
 
-    private List<Categories.DataBean> categoryList = new ArrayList<>();
+    private List<HomeCategories.DataBean> categoryList = new ArrayList<>();
 
     public HomePagerAdapter(@NonNull @NotNull FragmentManager fm) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -26,7 +26,7 @@ public class HomePagerAdapter extends FragmentPagerAdapter {
     @NotNull
     @Override
     public Fragment getItem(int position) {
-        Categories.DataBean dataBean = categoryList.get(position);
+        HomeCategories.DataBean dataBean = categoryList.get(position);
         HomePagerFragment homePagerFragment = HomePagerFragment.newInstance(dataBean);
         return homePagerFragment;
     }
@@ -43,9 +43,9 @@ public class HomePagerAdapter extends FragmentPagerAdapter {
         return categoryList.get(position).getTitle();
     }
 
-    public void setCategories(Categories categories) {
+    public void setCategories(HomeCategories homeCategories) {
         categoryList.clear();
-        List<Categories.DataBean> data = categories.getData();
+        List<HomeCategories.DataBean> data = homeCategories.getData();
         this.categoryList.addAll(data);
         notifyDataSetChanged();
     }

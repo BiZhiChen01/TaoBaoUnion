@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.chen.taobaounion.R;
 import com.chen.taobaounion.base.BaseFragment;
-import com.chen.taobaounion.model.bean.Categories;
+import com.chen.taobaounion.model.bean.HomeCategories;
 import com.chen.taobaounion.model.bean.HomeCategoryContent;
 import com.chen.taobaounion.presenter.ICategoryPagerPresenter;
 import com.chen.taobaounion.presenter.ITicketPresenter;
@@ -55,7 +55,7 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
     private int mMaterialId;
     private HomePagerContentAdapter mContentAdapter;
 
-    public static HomePagerFragment newInstance(Categories.DataBean category) {
+    public static HomePagerFragment newInstance(HomeCategories.DataBean category) {
         HomePagerFragment homePagerFragment = new HomePagerFragment();
         Bundle bundle = new Bundle();
         bundle.putString(Constants.KEY_HOME_PAGER_TITLE, category.getTitle());

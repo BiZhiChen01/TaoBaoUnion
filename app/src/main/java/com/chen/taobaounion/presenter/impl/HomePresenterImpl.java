@@ -1,7 +1,7 @@
 package com.chen.taobaounion.presenter.impl;
 
 import com.chen.taobaounion.model.Api;
-import com.chen.taobaounion.model.bean.Categories;
+import com.chen.taobaounion.model.bean.HomeCategories;
 import com.chen.taobaounion.presenter.IHomePresenter;
 import com.chen.taobaounion.utils.LogUtils;
 import com.chen.taobaounion.utils.RetrofitManager;
@@ -25,20 +25,20 @@ public class HomePresenterImpl implements IHomePresenter {
         }
         Retrofit retrofit = RetrofitManager.getInstance().getRetrofit();
         Api api = retrofit.create(Api.class);
-        Call<Categories> task = api.getCategories();
-        task.enqueue(new Callback<Categories>() {
+        Call<HomeCategories> task = api.getCategories();
+        task.enqueue(new Callback<HomeCategories>() {
             @Override
-            public void onResponse(Call<Categories> call, Response<Categories> response) {
+            public void onResponse(Call<HomeCategories> call, Response<HomeCategories> response) {
                 int code = response.code();
                 LogUtils.d(HomePresenterImpl.this, "result code is ===> " + code);
                 if (code == HttpURLConnection.HTTP_OK) {
-                    Categories categories = response.body();
-                    LogUtils.d(HomePresenterImpl.this, categories.toString());
+                    HomeCategories homeCategories = response.body();
+                    LogUtils.d(HomePresenterImpl.this, homeCategories.toString());
                     if (mCallback != null) {
-                        if (categories == null || categories.getData().size() == 0) {
+                        if (homeCategories == null || homeCategories.getData().size() == 0) {
                             mCallback.onEmpty();
                         } else {
-                            mCallback.onCategoriesLoaded(categories);
+                            mCallback.onCategoriesLoaded(homeCategories);
                         }
                     }
                 } else {
@@ -50,7 +50,7 @@ public class HomePresenterImpl implements IHomePresenter {
             }
 
             @Override
-            public void onFailure(Call<Categories> call, Throwable t) {
+            public void onFailure(Call<HomeCategories> call, Throwable t) {
                 if (mCallback != null) {
                     mCallback.onError();
                 }

@@ -1,8 +1,9 @@
 package com.chen.taobaounion.model;
 
-import com.chen.taobaounion.model.bean.Categories;
+import com.chen.taobaounion.model.bean.HomeCategories;
 import com.chen.taobaounion.model.bean.HomeCategoryContent;
-import com.chen.taobaounion.model.bean.TicketParams;
+import com.chen.taobaounion.model.bean.SelectedCategories;
+import com.chen.taobaounion.model.bean.SelectedCategoryContent;
 import com.chen.taobaounion.model.bean.TicketResult;
 
 import retrofit2.Call;
@@ -14,11 +15,17 @@ import retrofit2.http.Url;
 public interface Api {
 
     @GET("discovery/categories")
-    Call<Categories> getCategories();
+    Call<HomeCategories> getCategories();
 
     @GET
     Call<HomeCategoryContent> getHomeCategoryContent(@Url String url);
 
     @POST("tpwd")
     Call<TicketResult> getTicket(@Body TicketParams ticketParams);
+
+    @GET("recommend/categories")
+    Call<SelectedCategories> getSelectedCategories();
+
+    @GET
+    Call<SelectedCategoryContent> getSelectedCategoryContent(@Url String url);
 }

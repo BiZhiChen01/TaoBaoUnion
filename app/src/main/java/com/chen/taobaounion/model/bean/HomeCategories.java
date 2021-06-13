@@ -2,7 +2,7 @@ package com.chen.taobaounion.model.bean;
 
 import java.util.List;
 
-public class Categories {
+public class HomeCategories {
 
     private Boolean success;
     private Integer code;

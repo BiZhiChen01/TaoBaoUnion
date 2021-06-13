@@ -21,4 +21,8 @@ public class UrlUtils {
             return "https:" + url;
         }
     }
+
+    public static String getSelectedCategoryContentUrl(Integer favorites_id) {
+        return "recommend/" + favorites_id;
+    }
 }
