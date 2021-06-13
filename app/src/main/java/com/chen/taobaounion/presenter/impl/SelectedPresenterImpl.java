@@ -19,7 +19,6 @@ import retrofit2.Retrofit;
 public class SelectedPresenterImpl implements ISelectedPresenter {
     private ISelectedCallback mViewCallback = null;
     private final Api mApi;
-    private SelectedCategories.DataBean mCurrentItem = null;
 
     public SelectedPresenterImpl() {
         Retrofit retrofit = RetrofitManager.getInstance().getRetrofit();
@@ -60,11 +59,11 @@ public class SelectedPresenterImpl implements ISelectedPresenter {
         if (mViewCallback != null) {
             mViewCallback.onError();
         }
+        mViewCallback.onError();
     }
 
     @Override
     public void getCategoryContent(SelectedCategories.DataBean item) {
-        this.mCurrentItem = item;
         String targetUrl = UrlUtils.getSelectedCategoryContentUrl(item.getFavorites_id());
         Call<SelectedCategoryContent> task = mApi.getSelectedCategoryContent(targetUrl);
         task.enqueue(new Callback<SelectedCategoryContent>() {
@@ -95,9 +94,7 @@ public class SelectedPresenterImpl implements ISelectedPresenter {
 
     @Override
     public void reloadContent() {
-        if (mViewCallback != null) {
-            this.getCategoryContent(mCurrentItem);
-        }
+        this.getCategories();
     }
 
     @Override

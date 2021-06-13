@@ -27,6 +27,7 @@ import com.chen.taobaounion.ui.adapter.HomePagerContentAdapter;
 import com.chen.taobaounion.utils.Constants;
 import com.chen.taobaounion.utils.LogUtils;
 import com.chen.taobaounion.utils.PresenterManager;
+import com.chen.taobaounion.utils.SizeUtils;
 import com.chen.taobaounion.utils.ToastUtils;
 import com.chen.taobaounion.utils.UrlUtils;
 import com.chen.taobaounion.view.ICategoryPagerCallback;
@@ -93,8 +94,9 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
         mContentList.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull @NotNull Rect outRect, @NonNull @NotNull View view, @NonNull @NotNull RecyclerView parent, @NonNull @NotNull RecyclerView.State state) {
-                outRect.top = 8;
-                outRect.bottom = 8;
+                int topAndBottom = SizeUtils.dip2px(getContext(), 4);
+                outRect.top = topAndBottom;
+                outRect.bottom = topAndBottom;
             }
         });
         mContentAdapter = new HomePagerContentAdapter();
