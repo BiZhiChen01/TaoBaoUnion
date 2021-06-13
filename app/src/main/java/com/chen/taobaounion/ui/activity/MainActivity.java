@@ -69,9 +69,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private BaseFragment lastOneFragment = null;
+
     private void switchFragment(BaseFragment targetFragment) {
         FragmentTransaction transaction = mManager.beginTransaction();
-        transaction.replace(R.id.main_page_content, targetFragment);
+        if (!targetFragment.isAdded()) {
+            transaction.add(R.id.main_page_content, targetFragment);
+        } else {
+            transaction.show(targetFragment);
+        }
+        if (lastOneFragment != null) {
+            transaction.hide(lastOneFragment);
+        }
+        lastOneFragment = targetFragment;
         transaction.commit();
     }
 }
