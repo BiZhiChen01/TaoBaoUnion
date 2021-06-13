@@ -21,19 +21,7 @@ import retrofit2.Retrofit;
 
 public class CategoryPagePresenterImpl implements ICategoryPagerPresenter {
 
-    private static ICategoryPagerPresenter sInstance = null;
     private Integer mCurrentPage;
-
-    public static ICategoryPagerPresenter getInstance() {
-        if (sInstance == null) {
-            sInstance = new CategoryPagePresenterImpl();
-        }
-        return sInstance;
-    }
-
-    private CategoryPagePresenterImpl() {
-
-    }
 
     private Map<Integer, Integer> pagesInfo = new HashMap<>();
     public static final int DEFAULT_PAGE = 1;
@@ -163,14 +151,14 @@ public class CategoryPagePresenterImpl implements ICategoryPagerPresenter {
     private List<ICategoryPagerCallback> mCallbacks = new ArrayList<>();
 
     @Override
-    public void registerCallback(ICategoryPagerCallback callback) {
+    public void registerViewCallback(ICategoryPagerCallback callback) {
         if (!mCallbacks.contains(callback)) {
             mCallbacks.add(callback);
         }
     }
 
     @Override
-    public void unregisterCallback(ICategoryPagerCallback callback) {
+    public void unregisterViewCallback(ICategoryPagerCallback callback) {
         mCallbacks.remove(callback);
     }
 }

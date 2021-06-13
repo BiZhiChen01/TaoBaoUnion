@@ -1,8 +1,10 @@
 package com.chen.taobaounion.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
@@ -19,11 +21,12 @@ import com.chen.taobaounion.base.BaseFragment;
 import com.chen.taobaounion.model.bean.Categories;
 import com.chen.taobaounion.model.bean.HomeCategoryContent;
 import com.chen.taobaounion.presenter.ICategoryPagerPresenter;
-import com.chen.taobaounion.presenter.impl.CategoryPagePresenterImpl;
+import com.chen.taobaounion.presenter.ITicketPresenter;
+import com.chen.taobaounion.ui.activity.TicketActivity;
 import com.chen.taobaounion.ui.adapter.HomePagerContentAdapter;
-import com.lcodecore.tkrefreshlayout.views.TbNestedScrollView;
 import com.chen.taobaounion.utils.Constants;
 import com.chen.taobaounion.utils.LogUtils;
+import com.chen.taobaounion.utils.PresenterManager;
 import com.chen.taobaounion.utils.ToastUtils;
 import com.chen.taobaounion.utils.UrlUtils;
 import com.chen.taobaounion.view.ICategoryPagerCallback;
@@ -31,11 +34,13 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout;
+import com.lcodecore.tkrefreshlayout.views.TbNestedScrollView;
 import com.youth.banner.Banner;
 import com.youth.banner.adapter.BannerImageAdapter;
 import com.youth.banner.config.IndicatorConfig;
 import com.youth.banner.holder.BannerImageHolder;
 import com.youth.banner.indicator.CircleIndicator;
+import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.transformer.DepthPageTransformer;
 
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +49,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class HomePagerFragment extends BaseFragment implements ICategoryPagerCallback {
+public class HomePagerFragment extends BaseFragment implements ICategoryPagerCallback, HomePagerContentAdapter.OnListItemClickListener {
 
     private ICategoryPagerPresenter mCategoryPagePresenter;
     private int mMaterialId;
@@ -103,8 +108,8 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
 
     @Override
     protected void initPresenter() {
-        mCategoryPagePresenter = CategoryPagePresenterImpl.getInstance();
-        mCategoryPagePresenter.registerCallback(this);
+        mCategoryPagePresenter = PresenterManager.getInstance().getCategoryPagePresenter();
+        mCategoryPagePresenter.registerViewCallback(this);
     }
 
     @Override
@@ -145,6 +150,8 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
                 }
             }
         });
+
+        mContentAdapter.setOnListItemClickListener(this);
     }
 
     @Override
@@ -226,7 +233,13 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
                 .setIndicatorNormalColor(getContext().getColor(R.color.white))
                 .setIndicatorMargins(new IndicatorConfig.Margins(20))
                 .setIndicatorWidth(18, 18)
-                .setPageTransformer(new DepthPageTransformer());
+                .setPageTransformer(new DepthPageTransformer())
+                .setOnBannerListener(new OnBannerListener() {
+                    @Override
+                    public void OnBannerClick(Object data, int position) {
+                        handleItemClick(contents.get(position));
+                    }
+                });
     }
 
     @Override
@@ -237,7 +250,25 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
     @Override
     protected void release() {
         if (mCategoryPagePresenter != null) {
-            mCategoryPagePresenter.unregisterCallback(this);
+            mCategoryPagePresenter.unregisterViewCallback(this);
         }
     }
+
+    @Override
+    public void onItemClick(HomeCategoryContent.DataBean item) {
+        handleItemClick(item);
+    }
+
+    private void handleItemClick(HomeCategoryContent.DataBean item) {
+        String title = item.getTitle();
+        String url = item.getCoupon_click_url();
+        if (TextUtils.isEmpty(url)) {
+            url = item.getClick_url();
+        }
+        String cover = item.getPict_url();
+        ITicketPresenter ticketPresenter = PresenterManager.getInstance().getTicketPresenter();
+        ticketPresenter.getTicket(title, url, cover);
+        startActivity(new Intent(getContext(), TicketActivity.class));
+    }
+
 }

@@ -18,13 +18,13 @@
             android:gravity="center"
             android:text="领券联盟"
             android:textColor="@color/white"
-            android:textSize="12sp"/>
+            android:textSize="10sp"/>
 
         <EditText
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_weight="6"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
             android:paddingLeft="10dp"
             android:hint="@string/text_search_tips"

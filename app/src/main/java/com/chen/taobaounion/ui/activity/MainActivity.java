@@ -1,14 +1,13 @@
 package com.chen.taobaounion.ui.activity;
 
-import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.chen.taobaounion.R;
+import com.chen.taobaounion.base.BaseActivity;
 import com.chen.taobaounion.base.BaseFragment;
 import com.chen.taobaounion.ui.fragment.HomeFragment;
 import com.chen.taobaounion.ui.fragment.RedPacketFragment;
@@ -19,9 +18,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @BindView(R.id.main_nav_bar)
     public BottomNavigationView mNavigationView;
@@ -32,16 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager mManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-
-        initFragment();
-        initListener();
-    }
-
-    private void initFragment() {
+    protected void initView() {
         mHomeFragment = new HomeFragment();
         mSelectedFragment = new SelectedFragment();
         mRedPacketFragment = new RedPacketFragment();
@@ -51,7 +40,18 @@ public class MainActivity extends AppCompatActivity {
         switchFragment(mHomeFragment);
     }
 
-    private void initListener() {
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void initPresenter() {
+
+    }
+
+    @Override
+    protected void initEvent() {
         mNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
