@@ -21,7 +21,7 @@ import com.chen.taobaounion.model.bean.HomeCategoryContent;
 import com.chen.taobaounion.presenter.ICategoryPagerPresenter;
 import com.chen.taobaounion.presenter.impl.CategoryPagePresenterImpl;
 import com.chen.taobaounion.ui.adapter.HomePagerContentAdapter;
-import com.chen.taobaounion.ui.custom.TbNestedScrollView;
+import com.lcodecore.tkrefreshlayout.views.TbNestedScrollView;
 import com.chen.taobaounion.utils.Constants;
 import com.chen.taobaounion.utils.LogUtils;
 import com.chen.taobaounion.utils.ToastUtils;
