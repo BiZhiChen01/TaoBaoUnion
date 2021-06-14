@@ -2,10 +2,12 @@ package com.chen.taobaounion.utils;
 
 import com.chen.taobaounion.presenter.ICategoryPagerPresenter;
 import com.chen.taobaounion.presenter.IHomePresenter;
+import com.chen.taobaounion.presenter.IOnSellPresenter;
 import com.chen.taobaounion.presenter.ISelectedPresenter;
 import com.chen.taobaounion.presenter.ITicketPresenter;
 import com.chen.taobaounion.presenter.impl.CategoryPagePresenterImpl;
 import com.chen.taobaounion.presenter.impl.HomePresenterImpl;
+import com.chen.taobaounion.presenter.impl.OnSellPresenterImpl;
 import com.chen.taobaounion.presenter.impl.SelectedPresenterImpl;
 import com.chen.taobaounion.presenter.impl.TicketPresenterImpl;
 
@@ -16,6 +18,7 @@ public class PresenterManager {
     private final IHomePresenter mHomePresenter;
     private final ITicketPresenter mTicketPresenter;
     private final ISelectedPresenter mSelectedPresenter;
+    private final IOnSellPresenter mOnSellPresenter;
 
     public static PresenterManager getInstance() {
         return ourInstance;
@@ -26,6 +29,7 @@ public class PresenterManager {
         mHomePresenter = new HomePresenterImpl();
         mTicketPresenter = new TicketPresenterImpl();
         mSelectedPresenter = new SelectedPresenterImpl();
+        mOnSellPresenter = new OnSellPresenterImpl();
     }
 
     public IHomePresenter getHomePresenter() {
@@ -43,4 +47,9 @@ public class PresenterManager {
     public ISelectedPresenter getSelectedPresenter() {
         return mSelectedPresenter;
     }
+
+    public IOnSellPresenter getOnSellPresenter() {
+        return mOnSellPresenter;
+    }
+
 }

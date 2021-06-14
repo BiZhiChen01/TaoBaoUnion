@@ -10,7 +10,7 @@ import com.chen.taobaounion.R;
 import com.chen.taobaounion.base.BaseActivity;
 import com.chen.taobaounion.base.BaseFragment;
 import com.chen.taobaounion.ui.fragment.HomeFragment;
-import com.chen.taobaounion.ui.fragment.RedPacketFragment;
+import com.chen.taobaounion.ui.fragment.OnSellFragment;
 import com.chen.taobaounion.ui.fragment.SearchFragment;
 import com.chen.taobaounion.ui.fragment.SelectedFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -25,7 +25,7 @@ public class MainActivity extends BaseActivity {
     public BottomNavigationView mNavigationView;
     private HomeFragment mHomeFragment;
     private SelectedFragment mSelectedFragment;
-    private RedPacketFragment mRedPacketFragment;
+    private OnSellFragment mOnSellFragment;
     private SearchFragment mSearchFragment;
     private FragmentManager mManager;
 
@@ -33,7 +33,7 @@ public class MainActivity extends BaseActivity {
     protected void initView() {
         mHomeFragment = new HomeFragment();
         mSelectedFragment = new SelectedFragment();
-        mRedPacketFragment = new RedPacketFragment();
+        mOnSellFragment = new OnSellFragment();
         mSearchFragment = new SearchFragment();
 
         mManager = getSupportFragmentManager();
@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity {
                 } else if (item.getItemId() == R.id.selected) {
                     switchFragment(mSelectedFragment);
                 } else if (item.getItemId() == R.id.red_packet) {
-                    switchFragment(mRedPacketFragment);
+                    switchFragment(mOnSellFragment);
                 } else if (item.getItemId() == R.id.search) {
                     switchFragment(mSearchFragment);
                 }

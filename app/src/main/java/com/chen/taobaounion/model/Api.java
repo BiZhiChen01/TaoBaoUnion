@@ -2,6 +2,7 @@ package com.chen.taobaounion.model;
 
 import com.chen.taobaounion.model.bean.HomeCategories;
 import com.chen.taobaounion.model.bean.HomeCategoryContent;
+import com.chen.taobaounion.model.bean.OnSellContent;
 import com.chen.taobaounion.model.bean.SelectedCategories;
 import com.chen.taobaounion.model.bean.SelectedCategoryContent;
 import com.chen.taobaounion.model.bean.TicketResult;
@@ -28,4 +29,7 @@ public interface Api {
 
     @GET
     Call<SelectedCategoryContent> getSelectedCategoryContent(@Url String url);
+
+    @GET
+    Call<OnSellContent> getOnSellContent(@Url String url);
 }

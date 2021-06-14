@@ -25,4 +25,8 @@ public class UrlUtils {
     public static String getSelectedCategoryContentUrl(Integer favorites_id) {
         return "recommend/" + favorites_id;
     }
+
+    public static String getOnSellUrl(int currentPage) {
+        return "onSell/" + currentPage;
+    }
 }
