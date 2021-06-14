@@ -24,7 +24,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomePagerContentAdapter extends RecyclerView.Adapter<HomePagerContentAdapter.InnerHolder> {
+public class HomeAndSearchContentAdapter extends RecyclerView.Adapter<HomeAndSearchContentAdapter.InnerHolder> {
 
     List<IHomeAndSearchGoodsItemInfo> mData = new ArrayList<>();
     private OnListItemClickListener mItemClickListener = null;
@@ -63,7 +63,7 @@ public class HomePagerContentAdapter extends RecyclerView.Adapter<HomePagerConte
         notifyDataSetChanged();
     }
 
-    public void addLoadedData(List<HomeCategoryContent.DataBean> contents) {
+    public void addLoadedData(List<? extends IHomeAndSearchGoodsItemInfo> contents) {
         mData.addAll(contents);
         notifyItemRangeChanged(mData.size(), contents.size());
     }

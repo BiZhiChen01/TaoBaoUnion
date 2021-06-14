@@ -17,12 +17,15 @@ import com.chen.taobaounion.model.bean.Histories;
 import com.chen.taobaounion.model.bean.SearchRecommend;
 import com.chen.taobaounion.model.bean.SearchResult;
 import com.chen.taobaounion.presenter.ISearchPresenter;
-import com.chen.taobaounion.ui.adapter.HomePagerContentAdapter;
+import com.chen.taobaounion.ui.adapter.HomeAndSearchContentAdapter;
 import com.chen.taobaounion.ui.custom.FlowTextLayout;
 import com.chen.taobaounion.utils.LogUtils;
 import com.chen.taobaounion.utils.PresenterManager;
 import com.chen.taobaounion.utils.SizeUtils;
+import com.chen.taobaounion.utils.ToastUtils;
 import com.chen.taobaounion.view.ISearchCallback;
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,7 +50,10 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
     public ImageView mHistoryDelete;
     @BindView(R.id.search_result_list)
     public RecyclerView mSearchList;
-    private HomePagerContentAdapter mSearchResultAdapter;
+    @BindView(R.id.search_result_refresh)
+    public TwinklingRefreshLayout mRefreshLayout;
+
+    private HomeAndSearchContentAdapter mSearchResultAdapter;
 
     @Override
     protected int getRootViewResId() {
@@ -62,7 +68,7 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
     @Override
     protected void initView(View rootView) {
         mSearchList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mSearchResultAdapter = new HomePagerContentAdapter();
+        mSearchResultAdapter = new HomeAndSearchContentAdapter();
         mSearchList.setAdapter(mSearchResultAdapter);
         mSearchList.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -72,6 +78,10 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
                 outRect.bottom = topAndBottom;
             }
         });
+
+        mRefreshLayout.setEnableLoadmore(true);
+        mRefreshLayout.setEnableRefresh(false);
+        mRefreshLayout.setEnableOverScroll(true);
     }
 
     @Override
@@ -89,6 +99,15 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
             @Override
             public void onClick(View v) {
                 mSearchPresenter.delHistories();
+            }
+        });
+
+        mRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
+            @Override
+            public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
+                if (mSearchPresenter != null) {
+                    mSearchPresenter.loaderMore();
+                }
             }
         });
     }
@@ -122,17 +141,21 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
 
     @Override
     public void onMoreLoaded(SearchResult result) {
-
+        List<SearchResult.DataBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean> moreData = result.getData().getTbk_dg_material_optional_response().getResult_list().getMap_data();
+        mSearchResultAdapter.addLoadedData(moreData);
+        mRefreshLayout.finishLoadmore();
     }
 
     @Override
     public void onMoreLoadedError() {
-
+        mRefreshLayout.finishLoadmore();
+        ToastUtils.showToast("网络异常！请稍后重视...");
     }
 
     @Override
     public void onMoreLoadedEmpty() {
-
+        mRefreshLayout.finishLoadmore();
+        ToastUtils.showToast("没有更多数据...");
     }
 
     @Override
@@ -151,17 +174,17 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
 
     @Override
     public void onError() {
-
+        setUpState(State.ERROR);
     }
 
     @Override
     public void onLoading() {
-
+        setUpState(State.LOADING);
     }
 
     @Override
     public void onEmpty() {
-
+        setUpState(State.EMPTY);
     }
 
     @Override

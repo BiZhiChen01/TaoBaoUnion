@@ -78,7 +78,7 @@ public class MainActivity extends BaseActivity {
         } else {
             transaction.show(targetFragment);
         }
-        if (lastOneFragment != null) {
+        if (lastOneFragment != null ) {
             transaction.hide(lastOneFragment);
         }
         lastOneFragment = targetFragment;

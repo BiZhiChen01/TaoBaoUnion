@@ -20,7 +20,7 @@ import com.chen.taobaounion.model.bean.HomeCategories;
 import com.chen.taobaounion.model.bean.HomeCategoryContent;
 import com.chen.taobaounion.model.bean.IBaseInfo;
 import com.chen.taobaounion.presenter.ICategoryPagerPresenter;
-import com.chen.taobaounion.ui.adapter.HomePagerContentAdapter;
+import com.chen.taobaounion.ui.adapter.HomeAndSearchContentAdapter;
 import com.chen.taobaounion.ui.adapter.IHomeAndSearchGoodsItemInfo;
 import com.chen.taobaounion.utils.Constants;
 import com.chen.taobaounion.utils.LogUtils;
@@ -49,11 +49,11 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class HomePagerFragment extends BaseFragment implements ICategoryPagerCallback, HomePagerContentAdapter.OnListItemClickListener {
+public class HomePagerFragment extends BaseFragment implements ICategoryPagerCallback, HomeAndSearchContentAdapter.OnListItemClickListener {
 
     private ICategoryPagerPresenter mCategoryPagePresenter;
     private int mMaterialId;
-    private HomePagerContentAdapter mContentAdapter;
+    private HomeAndSearchContentAdapter mContentAdapter;
 
     public static HomePagerFragment newInstance(HomeCategories.DataBean category) {
         HomePagerFragment homePagerFragment = new HomePagerFragment();
@@ -98,7 +98,7 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
                 outRect.bottom = topAndBottom;
             }
         });
-        mContentAdapter = new HomePagerContentAdapter();
+        mContentAdapter = new HomeAndSearchContentAdapter();
         mContentList.setAdapter(mContentAdapter);
         mTwinklingRefreshLayout.setEnableRefresh(true);
         mTwinklingRefreshLayout.setEnableLoadmore(true);
