@@ -3,10 +3,12 @@ package com.chen.taobaounion.ui.fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.chen.taobaounion.R;
 import com.chen.taobaounion.base.BaseFragment;
+import com.chen.taobaounion.model.bean.Histories;
 import com.chen.taobaounion.model.bean.SearchRecommend;
 import com.chen.taobaounion.model.bean.SearchResult;
 import com.chen.taobaounion.presenter.ISearchPresenter;
@@ -32,6 +34,8 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
     public LinearLayout mHistoryContainer;
     @BindView(R.id.search_recommend_container)
     public LinearLayout mRecommendContainer;
+    @BindView(R.id.search_history_delete)
+    public ImageView mHistoryDelete;
 
     @Override
     protected int getRootViewResId() {
@@ -58,19 +62,31 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
     }
 
     @Override
-    public void onHistoriesLoaded(List<String> histories) {
+    protected void initListener() {
+        mHistoryDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchPresenter.delHistories();
+            }
+        });
+    }
+
+    @Override
+    public void onHistoriesLoaded(Histories histories) {
         LogUtils.d(this, "onHistoriesLoaded  === > " + histories);
-        if (histories == null || histories.size() == 0) {
+        if (histories == null || histories.getHistories().size() == 0) {
             mHistoryContainer.setVisibility(View.GONE);
         } else {
             mHistoryContainer.setVisibility(View.VISIBLE);
-            mHistoriesView.setTextList(histories);
+            mHistoriesView.setTextList(histories.getHistories());
         }
     }
 
     @Override
     public void onHistoriesDeleted() {
-
+        if (mSearchPresenter != null) {
+            mSearchPresenter.getHistories();
+        }
     }
 
     @Override

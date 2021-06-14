@@ -1,6 +1,7 @@
 package com.chen.taobaounion.view;
 
 import com.chen.taobaounion.base.IBaseCallback;
+import com.chen.taobaounion.model.bean.Histories;
 import com.chen.taobaounion.model.bean.SearchRecommend;
 import com.chen.taobaounion.model.bean.SearchResult;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface ISearchCallback extends IBaseCallback {
 
-    void onHistoriesLoaded(List<String> histories);
+    void onHistoriesLoaded(Histories histories);
 
     void onHistoriesDeleted();
 
