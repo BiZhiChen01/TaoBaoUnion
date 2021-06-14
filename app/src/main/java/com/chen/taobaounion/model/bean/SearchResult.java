@@ -1,5 +1,7 @@
 package com.chen.taobaounion.model.bean;
 
+import com.chen.taobaounion.ui.adapter.IHomeAndSearchGoodsItemInfo;
+
 import java.util.List;
 
 public class SearchResult {
@@ -118,12 +120,12 @@ public class SearchResult {
                     this.map_data = map_data;
                 }
 
-                public static class MapDataBean {
+                public static class MapDataBean implements IHomeAndSearchGoodsItemInfo {
                     private Integer category_id;
                     private String category_name;
                     private String commission_rate;
                     private String commission_type;
-                    private String coupon_amount;
+                    private long coupon_amount;
                     private String coupon_end_time;
                     private String coupon_id;
                     private String coupon_info;
@@ -202,11 +204,11 @@ public class SearchResult {
                         this.commission_type = commission_type;
                     }
 
-                    public String getCoupon_amount() {
+                    public long getCoupon_amount() {
                         return coupon_amount;
                     }
 
-                    public void setCoupon_amount(String coupon_amount) {
+                    public void setCoupon_amount(long coupon_amount) {
                         this.coupon_amount = coupon_amount;
                     }
 
@@ -468,6 +470,16 @@ public class SearchResult {
 
                     public String getTitle() {
                         return title;
+                    }
+
+                    @Override
+                    public String getCoupon_click_url() {
+                        return null;
+                    }
+
+                    @Override
+                    public String getClick_url() {
+                        return null;
                     }
 
                     public void setTitle(String title) {

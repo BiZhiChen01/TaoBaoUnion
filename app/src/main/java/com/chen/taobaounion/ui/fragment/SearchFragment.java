@@ -1,10 +1,15 @@
 package com.chen.taobaounion.ui.fragment;
 
+import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chen.taobaounion.R;
 import com.chen.taobaounion.base.BaseFragment;
@@ -12,10 +17,14 @@ import com.chen.taobaounion.model.bean.Histories;
 import com.chen.taobaounion.model.bean.SearchRecommend;
 import com.chen.taobaounion.model.bean.SearchResult;
 import com.chen.taobaounion.presenter.ISearchPresenter;
+import com.chen.taobaounion.ui.adapter.HomePagerContentAdapter;
 import com.chen.taobaounion.ui.custom.FlowTextLayout;
 import com.chen.taobaounion.utils.LogUtils;
 import com.chen.taobaounion.utils.PresenterManager;
+import com.chen.taobaounion.utils.SizeUtils;
 import com.chen.taobaounion.view.ISearchCallback;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +45,9 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
     public LinearLayout mRecommendContainer;
     @BindView(R.id.search_history_delete)
     public ImageView mHistoryDelete;
+    @BindView(R.id.search_result_list)
+    public RecyclerView mSearchList;
+    private HomePagerContentAdapter mSearchResultAdapter;
 
     @Override
     protected int getRootViewResId() {
@@ -49,7 +61,17 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
 
     @Override
     protected void initView(View rootView) {
-        setUpState(State.SUCCESS);
+        mSearchList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mSearchResultAdapter = new HomePagerContentAdapter();
+        mSearchList.setAdapter(mSearchResultAdapter);
+        mSearchList.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull @NotNull Rect outRect, @NonNull @NotNull View view, @NonNull @NotNull RecyclerView parent, @NonNull @NotNull RecyclerView.State state) {
+                int topAndBottom = SizeUtils.dip2px(getContext(), 4);
+                outRect.top = topAndBottom;
+                outRect.bottom = topAndBottom;
+            }
+        });
     }
 
     @Override
@@ -73,6 +95,7 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
 
     @Override
     public void onHistoriesLoaded(Histories histories) {
+        setUpState(State.SUCCESS);
         LogUtils.d(this, "onHistoriesLoaded  === > " + histories);
         if (histories == null || histories.getHistories().size() == 0) {
             mHistoryContainer.setVisibility(View.GONE);
@@ -91,7 +114,10 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
 
     @Override
     public void onSearchLoaded(SearchResult result) {
-
+        setUpState(State.SUCCESS);
+        mHistoryContainer.setVisibility(View.GONE);
+        mRecommendContainer.setVisibility(View.GONE);
+        mSearchResultAdapter.setData(result.getData().getTbk_dg_material_optional_response().getResult_list().getMap_data());
     }
 
     @Override

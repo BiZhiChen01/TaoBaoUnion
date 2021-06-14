@@ -1,5 +1,7 @@
 package com.chen.taobaounion.model.bean;
 
+import com.chen.taobaounion.ui.adapter.IHomeAndSearchGoodsItemInfo;
+
 import java.util.List;
 
 public class HomeCategoryContent {
@@ -41,12 +43,12 @@ public class HomeCategoryContent {
         this.data = data;
     }
 
-    public static class DataBean implements IBaseInfo {
+    public static class DataBean implements IHomeAndSearchGoodsItemInfo {
         private Integer category_id;
         private Object category_name;
         private String click_url;
         private String commission_rate;
-        private Integer coupon_amount;
+        private long coupon_amount;
         private String coupon_click_url;
         private String coupon_end_time;
         private Object coupon_info;
@@ -101,11 +103,11 @@ public class HomeCategoryContent {
             this.commission_rate = commission_rate;
         }
 
-        public Integer getCoupon_amount() {
+        public long getCoupon_amount() {
             return coupon_amount;
         }
 
-        public void setCoupon_amount(Integer coupon_amount) {
+        public void setCoupon_amount(long coupon_amount) {
             this.coupon_amount = coupon_amount;
         }
 

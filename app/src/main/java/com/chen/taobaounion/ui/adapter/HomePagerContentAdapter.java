@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 
 public class HomePagerContentAdapter extends RecyclerView.Adapter<HomePagerContentAdapter.InnerHolder> {
 
-    List<HomeCategoryContent.DataBean> mData = new ArrayList<>();
+    List<IHomeAndSearchGoodsItemInfo> mData = new ArrayList<>();
     private OnListItemClickListener mItemClickListener = null;
 
     @NonNull
@@ -40,14 +40,13 @@ public class HomePagerContentAdapter extends RecyclerView.Adapter<HomePagerConte
     @Override
     public void onBindViewHolder(@NonNull @NotNull InnerHolder holder, int position) {
         LogUtils.d(this, "onBindViewHolder === > " + position);
-        HomeCategoryContent.DataBean dataBean = mData.get(position);
+        IHomeAndSearchGoodsItemInfo dataBean = mData.get(position);
         holder.setData(dataBean);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mItemClickListener != null) {
-                    HomeCategoryContent.DataBean item = mData.get(position);
-                    mItemClickListener.onItemClick(item);
+                    mItemClickListener.onItemClick(dataBean);
                 }
             }
         });
@@ -58,7 +57,7 @@ public class HomePagerContentAdapter extends RecyclerView.Adapter<HomePagerConte
         return mData.size();
     }
 
-    public void setData(List<HomeCategoryContent.DataBean> contents) {
+    public void setData(List<? extends IHomeAndSearchGoodsItemInfo> contents) {
         mData.clear();
         mData.addAll(contents);
         notifyDataSetChanged();
@@ -94,17 +93,18 @@ public class HomePagerContentAdapter extends RecyclerView.Adapter<HomePagerConte
             ButterKnife.bind(this, itemView);
         }
 
-        public void setData(HomeCategoryContent.DataBean dataBean) {
+        public void setData(IHomeAndSearchGoodsItemInfo dataBean) {
             String finalPrice = dataBean.getZk_final_price();
-            Integer couponAmount = dataBean.getCoupon_amount();
+            long couponAmount = dataBean.getCoupon_amount();
             float resultPrice = Float.parseFloat(finalPrice) - couponAmount;
 
-            ViewGroup.LayoutParams coverLayoutParams = cover.getLayoutParams();
-            int width = coverLayoutParams.width;
-            int height = coverLayoutParams.height;
-            int coverSize = width > height ? width : height;
+//            ViewGroup.LayoutParams coverLayoutParams = cover.getLayoutParams();
+//            int width = coverLayoutParams.width;
+//            int height = coverLayoutParams.height;
+//            int coverSize = width > height ? width : height;
 
-            Glide.with(itemView.getContext()).load(UrlUtils.getCoverPath(dataBean.getPict_url(), coverSize)).into(cover);
+            String coverPath = UrlUtils.getCoverPath(dataBean.getPict_url());
+            Glide.with(itemView.getContext()).load(coverPath).into(cover);
             title.setText(dataBean.getTitle());
             afterOffPriceTv.setText(String.format("%.2f", resultPrice));
             offPriceTv.setText(String.format(itemView.getContext().getString(R.string.text_goods_off_price), couponAmount));
@@ -119,6 +119,6 @@ public class HomePagerContentAdapter extends RecyclerView.Adapter<HomePagerConte
     }
 
     public interface OnListItemClickListener {
-        void onItemClick(HomeCategoryContent.DataBean item);
+        void onItemClick(IHomeAndSearchGoodsItemInfo item);
     }
 }

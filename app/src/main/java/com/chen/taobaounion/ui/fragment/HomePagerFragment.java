@@ -21,6 +21,7 @@ import com.chen.taobaounion.model.bean.HomeCategoryContent;
 import com.chen.taobaounion.model.bean.IBaseInfo;
 import com.chen.taobaounion.presenter.ICategoryPagerPresenter;
 import com.chen.taobaounion.ui.adapter.HomePagerContentAdapter;
+import com.chen.taobaounion.ui.adapter.IHomeAndSearchGoodsItemInfo;
 import com.chen.taobaounion.utils.Constants;
 import com.chen.taobaounion.utils.LogUtils;
 import com.chen.taobaounion.utils.PresenterManager;
@@ -255,7 +256,7 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
     }
 
     @Override
-    public void onItemClick(HomeCategoryContent.DataBean item) {
+    public void onItemClick(IHomeAndSearchGoodsItemInfo item) {
         handleItemClick(item);
     }
 
