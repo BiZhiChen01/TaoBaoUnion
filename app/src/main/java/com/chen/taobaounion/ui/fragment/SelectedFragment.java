@@ -1,8 +1,6 @@
 package com.chen.taobaounion.ui.fragment;
 
-import android.content.Intent;
 import android.graphics.Rect;
-import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -14,13 +12,12 @@ import com.chen.taobaounion.base.BaseFragment;
 import com.chen.taobaounion.model.bean.SelectedCategories;
 import com.chen.taobaounion.model.bean.SelectedCategoryContent;
 import com.chen.taobaounion.presenter.ISelectedPresenter;
-import com.chen.taobaounion.presenter.ITicketPresenter;
-import com.chen.taobaounion.ui.activity.TicketActivity;
 import com.chen.taobaounion.ui.adapter.SelectContentAdapter;
 import com.chen.taobaounion.ui.adapter.SelectedCategoriesAdapter;
 import com.chen.taobaounion.utils.LogUtils;
 import com.chen.taobaounion.utils.PresenterManager;
 import com.chen.taobaounion.utils.SizeUtils;
+import com.chen.taobaounion.utils.TicketUtil;
 import com.chen.taobaounion.view.ISelectedCallback;
 
 import org.jetbrains.annotations.NotNull;
@@ -128,14 +125,6 @@ public class SelectedFragment extends BaseFragment implements ISelectedCallback,
 
     @Override
     public void onContentItemClick(SelectedCategoryContent.DataBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean item) {
-        String title = item.getTitle();
-        String url = item.getCoupon_click_url();
-        if (TextUtils.isEmpty(url)) {
-            url = item.getClick_url();
-        }
-        String cover = item.getPict_url();
-        ITicketPresenter ticketPresenter = PresenterManager.getInstance().getTicketPresenter();
-        ticketPresenter.getTicket(title, url, cover);
-        startActivity(new Intent(getContext(), TicketActivity.class));
+        TicketUtil.toTicketPage(getContext(), item);
     }
 }

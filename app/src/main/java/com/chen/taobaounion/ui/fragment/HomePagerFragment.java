@@ -1,10 +1,8 @@
 package com.chen.taobaounion.ui.fragment;
 
-import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
@@ -20,14 +18,14 @@ import com.chen.taobaounion.R;
 import com.chen.taobaounion.base.BaseFragment;
 import com.chen.taobaounion.model.bean.HomeCategories;
 import com.chen.taobaounion.model.bean.HomeCategoryContent;
+import com.chen.taobaounion.model.bean.IBaseInfo;
 import com.chen.taobaounion.presenter.ICategoryPagerPresenter;
-import com.chen.taobaounion.presenter.ITicketPresenter;
-import com.chen.taobaounion.ui.activity.TicketActivity;
 import com.chen.taobaounion.ui.adapter.HomePagerContentAdapter;
 import com.chen.taobaounion.utils.Constants;
 import com.chen.taobaounion.utils.LogUtils;
 import com.chen.taobaounion.utils.PresenterManager;
 import com.chen.taobaounion.utils.SizeUtils;
+import com.chen.taobaounion.utils.TicketUtil;
 import com.chen.taobaounion.utils.ToastUtils;
 import com.chen.taobaounion.utils.UrlUtils;
 import com.chen.taobaounion.view.ICategoryPagerCallback;
@@ -261,16 +259,8 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
         handleItemClick(item);
     }
 
-    private void handleItemClick(HomeCategoryContent.DataBean item) {
-        String title = item.getTitle();
-        String url = item.getCoupon_click_url();
-        if (TextUtils.isEmpty(url)) {
-            url = item.getClick_url();
-        }
-        String cover = item.getPict_url();
-        ITicketPresenter ticketPresenter = PresenterManager.getInstance().getTicketPresenter();
-        ticketPresenter.getTicket(title, url, cover);
-        startActivity(new Intent(getContext(), TicketActivity.class));
+    private void handleItemClick(IBaseInfo item) {
+        TicketUtil.toTicketPage(getContext(), item);
     }
 
 }

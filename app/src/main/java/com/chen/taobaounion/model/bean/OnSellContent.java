@@ -118,7 +118,7 @@ public class OnSellContent {
                     this.map_data = map_data;
                 }
 
-                public static class MapDataBean {
+                public static class MapDataBean implements IBaseInfo {
                     private Integer category_id;
                     private Object category_name;
                     private String click_url;

@@ -1,8 +1,6 @@
 package com.chen.taobaounion.ui.fragment;
 
-import android.content.Intent;
 import android.graphics.Rect;
-import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -11,13 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chen.taobaounion.R;
 import com.chen.taobaounion.base.BaseFragment;
+import com.chen.taobaounion.model.bean.IBaseInfo;
 import com.chen.taobaounion.model.bean.OnSellContent;
 import com.chen.taobaounion.presenter.IOnSellPresenter;
-import com.chen.taobaounion.presenter.ITicketPresenter;
-import com.chen.taobaounion.ui.activity.TicketActivity;
 import com.chen.taobaounion.ui.adapter.OnSellContentAdapter;
 import com.chen.taobaounion.utils.PresenterManager;
 import com.chen.taobaounion.utils.SizeUtils;
+import com.chen.taobaounion.utils.TicketUtil;
 import com.chen.taobaounion.utils.ToastUtils;
 import com.chen.taobaounion.view.IOnSellCallback;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -135,15 +133,7 @@ public class OnSellFragment extends BaseFragment implements IOnSellCallback, OnS
     }
 
     @Override
-    public void onSellItemClick(OnSellContent.DataBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean item) {
-        String title = item.getTitle();
-        String url = item.getCoupon_click_url();
-        if (TextUtils.isEmpty(url)) {
-            url = item.getClick_url();
-        }
-        String cover = item.getPict_url();
-        ITicketPresenter ticketPresenter = PresenterManager.getInstance().getTicketPresenter();
-        ticketPresenter.getTicket(title, url, cover);
-        startActivity(new Intent(getContext(), TicketActivity.class));
+    public void onSellItemClick(IBaseInfo item) {
+        TicketUtil.toTicketPage(getContext(), item);
     }
 }

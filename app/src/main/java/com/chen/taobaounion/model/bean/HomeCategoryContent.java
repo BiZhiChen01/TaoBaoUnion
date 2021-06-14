@@ -41,7 +41,7 @@ public class HomeCategoryContent {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements IBaseInfo {
         private Integer category_id;
         private Object category_name;
         private String click_url;

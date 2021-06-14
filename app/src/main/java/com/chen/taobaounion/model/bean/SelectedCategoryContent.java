@@ -128,7 +128,7 @@ public class SelectedCategoryContent {
                     this.map_data = map_data;
                 }
 
-                public static class MapDataBean {
+                public static class MapDataBean implements IBaseInfo {
                     private Integer category_id;
                     private String click_url;
                     private String commission_rate;
