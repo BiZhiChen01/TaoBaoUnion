@@ -10,7 +10,8 @@
         android:id="@+id/main_page_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="49dp"/>
+        android:layout_marginBottom="49dp"
+        android:background="@color/color_page_bg"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/main_nav_bar"

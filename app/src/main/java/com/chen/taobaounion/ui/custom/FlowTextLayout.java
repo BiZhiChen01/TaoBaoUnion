@@ -11,9 +11,10 @@ import android.widget.TextView;
 import com.chen.taobaounion.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class TextFlowLayout extends ViewGroup {
+public class FlowTextLayout extends ViewGroup {
 
     public static final float DEFAULT_SPACE = 10;
 
@@ -24,15 +25,15 @@ public class TextFlowLayout extends ViewGroup {
     private int mItemHeight;
     private OnFlowTextItemClickListener mItemClickListener = null;
 
-    public TextFlowLayout(Context context) {
+    public FlowTextLayout(Context context) {
         this(context, null);
     }
 
-    public TextFlowLayout(Context context, AttributeSet attrs) {
+    public FlowTextLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public TextFlowLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public FlowTextLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.FlowTextStyle);
         mItemHorizontalSpace = ta.getDimension(R.styleable.FlowTextStyle_horizontalSpace, DEFAULT_SPACE);
@@ -41,8 +42,13 @@ public class TextFlowLayout extends ViewGroup {
     }
 
     public void setTextList(List<String> textList) {
-        this.mTextList = textList;
+        removeAllViews();
+        this.mTextList.clear();
+        this.mTextList.addAll(textList);
+        Collections.reverse(mTextList);
+        //遍历内容
         for (String text : mTextList) {
+            //添加子view
             TextView item = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.flow_text_view, this, false);
             item.setText(text);
             item.setOnClickListener(new OnClickListener() {
@@ -60,6 +66,9 @@ public class TextFlowLayout extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (getChildCount() == 0) {
+            return;
+        }
         List<View> line = null;
         lines.clear();
         mSelfWidth = MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
