@@ -1,11 +1,16 @@
 package com.chen.taobaounion.ui.fragment;
 
 import android.graphics.Rect;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,10 +23,12 @@ import com.chen.taobaounion.model.bean.SearchRecommend;
 import com.chen.taobaounion.model.bean.SearchResult;
 import com.chen.taobaounion.presenter.ISearchPresenter;
 import com.chen.taobaounion.ui.adapter.HomeAndSearchContentAdapter;
+import com.chen.taobaounion.ui.adapter.IHomeAndSearchGoodsItemInfo;
 import com.chen.taobaounion.ui.custom.FlowTextLayout;
 import com.chen.taobaounion.utils.LogUtils;
 import com.chen.taobaounion.utils.PresenterManager;
 import com.chen.taobaounion.utils.SizeUtils;
+import com.chen.taobaounion.utils.TicketUtil;
 import com.chen.taobaounion.utils.ToastUtils;
 import com.chen.taobaounion.view.ISearchCallback;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -34,7 +41,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class SearchFragment extends BaseFragment implements ISearchCallback {
+public class SearchFragment extends BaseFragment implements ISearchCallback, HomeAndSearchContentAdapter.OnListItemClickListener {
 
     private ISearchPresenter mSearchPresenter;
 
@@ -52,6 +59,12 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
     public RecyclerView mSearchList;
     @BindView(R.id.search_result_refresh)
     public TwinklingRefreshLayout mRefreshLayout;
+    @BindView(R.id.search_btn)
+    public TextView mSearchBtn;
+    @BindView(R.id.search_clean_btn)
+    public ImageView mCleanInputBtn;
+    @BindView(R.id.search_edit)
+    public EditText mSearchInputBox;
 
     private HomeAndSearchContentAdapter mSearchResultAdapter;
 
@@ -89,7 +102,6 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
         mSearchPresenter = PresenterManager.getInstance().getSearchPresenter();
         mSearchPresenter.registerViewCallback(this);
         mSearchPresenter.getRecommendWords();
-        mSearchPresenter.doSearch("毛衣");
         mSearchPresenter.getHistories();
     }
 
@@ -108,6 +120,23 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
                 if (mSearchPresenter != null) {
                     mSearchPresenter.loaderMore();
                 }
+            }
+        });
+
+        mSearchResultAdapter.setOnListItemClickListener(this);
+
+        mSearchInputBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH && mSearchPresenter != null) {
+                    //发起请求
+                    String keyword = v.getText().toString().trim();
+                    if (TextUtils.isEmpty(keyword)) {
+                        return false;
+                    }
+                    mSearchPresenter.doSearch(keyword);
+                }
+                return false;
             }
         });
     }
@@ -136,7 +165,11 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
         setUpState(State.SUCCESS);
         mHistoryContainer.setVisibility(View.GONE);
         mRecommendContainer.setVisibility(View.GONE);
-        mSearchResultAdapter.setData(result.getData().getTbk_dg_material_optional_response().getResult_list().getMap_data());
+        try {
+            mSearchResultAdapter.setData(result.getData().getTbk_dg_material_optional_response().getResult_list().getMap_data());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -188,10 +221,22 @@ public class SearchFragment extends BaseFragment implements ISearchCallback {
     }
 
     @Override
+    protected void onRetryClick() {
+        if (mSearchPresenter != null) {
+            mSearchPresenter.reSearch();
+        }
+    }
+
+    @Override
     protected void release() {
         super.release();
         if (mSearchPresenter != null) {
             mSearchPresenter.unregisterViewCallback(this);
         }
+    }
+
+    @Override
+    public void onItemClick(IHomeAndSearchGoodsItemInfo item) {
+        TicketUtil.toTicketPage(getContext(),item);
     }
 }

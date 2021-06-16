@@ -474,12 +474,12 @@ public class SearchResult {
 
                     @Override
                     public String getCoupon_click_url() {
-                        return null;
+                        return coupon_share_url;
                     }
 
                     @Override
                     public String getClick_url() {
-                        return null;
+                        return item_url;
                     }
 
                     public void setTitle(String title) {

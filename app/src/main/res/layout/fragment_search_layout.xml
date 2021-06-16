@@ -10,19 +10,39 @@
         android:gravity="center"
         android:paddingLeft="5dp"
         android:background="@color/color_main">
-
-        <EditText
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:layout_weight="9"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:paddingLeft="10dp"
-            android:hint="@string/text_search_tips"
-            android:textSize="12sp"
-            android:background="@drawable/shape_home_edit" />
+            android:layout_weight="9">
+            <EditText
+                android:id="@+id/search_edit"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:paddingLeft="10dp"
+                android:hint="@string/text_search_tips"
+                android:textSize="12sp"
+                android:background="@drawable/shape_home_edit"
+                android:imeOptions="actionSearch"
+                android:focusable="true"
+                android:singleLine="true"
+                android:maxLines="1"/>
+
+            <ImageView
+                android:id="@+id/search_clean_btn"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/search_edit"
+                android:layout_marginLeft="-33dp"
+                android:src="@mipmap/remove"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
 
         <TextView
+            android:id="@+id/search_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
