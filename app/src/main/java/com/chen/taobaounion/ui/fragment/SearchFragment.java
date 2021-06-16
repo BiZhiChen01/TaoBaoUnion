@@ -1,7 +1,9 @@
 package com.chen.taobaounion.ui.fragment;
 
 import android.graphics.Rect;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -139,6 +141,53 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Hom
                 return false;
             }
         });
+
+        mSearchInputBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                mCleanInputBtn.setVisibility(hasInput(true) ? View.VISIBLE : View.GONE);
+                mSearchBtn.setText(hasInput(false) ? "搜索" : "取消");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mSearchInputBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchInputBox.setText("");
+            }
+        });
+
+        mSearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hasInput(false)) {
+                    if (mSearchPresenter != null) {
+                        mSearchPresenter.doSearch(mSearchInputBox.getText().toString().trim());
+                    }
+                } else {
+
+                }
+            }
+        });
+    }
+
+    private boolean hasInput(boolean containerSpace) {
+        if (containerSpace) {
+            return mSearchInputBox.getText().toString().trim().length() > 0;
+        } else {
+            return mSearchInputBox.getText().toString().length() > 0;
+        }
     }
 
     @Override
