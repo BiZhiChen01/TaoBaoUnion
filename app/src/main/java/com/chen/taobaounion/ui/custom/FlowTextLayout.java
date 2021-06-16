@@ -25,6 +25,10 @@ public class FlowTextLayout extends ViewGroup {
     private int mItemHeight;
     private OnFlowTextItemClickListener mItemClickListener = null;
 
+    public int getContentSize() {
+        return mTextList.size();
+    }
+
     public FlowTextLayout(Context context) {
         this(context, null);
     }

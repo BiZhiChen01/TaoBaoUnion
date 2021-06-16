@@ -27,6 +27,7 @@ import com.chen.taobaounion.presenter.ISearchPresenter;
 import com.chen.taobaounion.ui.adapter.HomeAndSearchContentAdapter;
 import com.chen.taobaounion.ui.adapter.IHomeAndSearchGoodsItemInfo;
 import com.chen.taobaounion.ui.custom.FlowTextLayout;
+import com.chen.taobaounion.utils.KeyboardUtil;
 import com.chen.taobaounion.utils.LogUtils;
 import com.chen.taobaounion.utils.PresenterManager;
 import com.chen.taobaounion.utils.SizeUtils;
@@ -165,6 +166,7 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Hom
             @Override
             public void onClick(View v) {
                 mSearchInputBox.setText("");
+                switch2HistoryPage();
             }
         });
 
@@ -174,12 +176,22 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Hom
                 if (hasInput(false)) {
                     if (mSearchPresenter != null) {
                         mSearchPresenter.doSearch(mSearchInputBox.getText().toString().trim());
+                        KeyboardUtil.hide(getContext(), v);
                     }
                 } else {
 
                 }
             }
         });
+    }
+
+    /**
+     * 切换到历史和推荐界面
+     */
+    private void switch2HistoryPage() {
+        mHistoryContainer.setVisibility(mHistoriesView.getContentSize() != 0 ? View.VISIBLE : View.GONE);
+        mRecommendContainer.setVisibility(mRecommendView.getContentSize() != 0 ? View.VISIBLE : View.GONE);
+        mRefreshLayout.setVisibility(View.GONE);
     }
 
     private boolean hasInput(boolean containerSpace) {
