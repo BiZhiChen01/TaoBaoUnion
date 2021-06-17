@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements IMainActivity {
 
     @BindView(R.id.main_nav_bar)
     public BottomNavigationView mNavigationView;
@@ -83,5 +83,10 @@ public class MainActivity extends BaseActivity {
         }
         lastOneFragment = targetFragment;
         transaction.commit();
+    }
+
+    @Override
+    public void switch2Search() {
+        mNavigationView.setSelectedItemId(R.id.search);
     }
 }

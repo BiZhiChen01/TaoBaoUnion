@@ -44,7 +44,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class SearchFragment extends BaseFragment implements ISearchCallback, HomeAndSearchContentAdapter.OnListItemClickListener {
+public class SearchFragment extends BaseFragment implements ISearchCallback, HomeAndSearchContentAdapter.OnListItemClickListener, FlowTextLayout.OnFlowTextItemClickListener {
 
     private ISearchPresenter mSearchPresenter;
 
@@ -89,7 +89,7 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Hom
         mSearchList.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull @NotNull Rect outRect, @NonNull @NotNull View view, @NonNull @NotNull RecyclerView parent, @NonNull @NotNull RecyclerView.State state) {
-                int topAndBottom = SizeUtils.dip2px(getContext(), 4);
+                int topAndBottom = SizeUtils.dip2px(getContext(), 1.5f);
                 outRect.top = topAndBottom;
                 outRect.bottom = topAndBottom;
             }
@@ -175,20 +175,27 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Hom
             public void onClick(View v) {
                 if (hasInput(false)) {
                     if (mSearchPresenter != null) {
-                        mSearchPresenter.doSearch(mSearchInputBox.getText().toString().trim());
+                        //mSearchPresenter.doSearch(mSearchInputBox.getText().toString().trim());
+                        toSearch(mSearchInputBox.getText().toString().trim());
                         KeyboardUtil.hide(getContext(), v);
                     }
                 } else {
-
+                    KeyboardUtil.hide(getContext(), v);
                 }
             }
         });
+
+        mHistoriesView.setOnFlowTextItemClickListener(this);
+        mRecommendView.setOnFlowTextItemClickListener(this);
     }
 
     /**
      * 切换到历史和推荐界面
      */
     private void switch2HistoryPage() {
+        if (mSearchPresenter != null) {
+            mSearchPresenter.getHistories();
+        }
         mHistoryContainer.setVisibility(mHistoriesView.getContentSize() != 0 ? View.VISIBLE : View.GONE);
         mRecommendContainer.setVisibility(mRecommendView.getContentSize() != 0 ? View.VISIBLE : View.GONE);
         mRefreshLayout.setVisibility(View.GONE);
@@ -299,5 +306,22 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Hom
     @Override
     public void onItemClick(IHomeAndSearchGoodsItemInfo item) {
         TicketUtil.toTicketPage(getContext(),item);
+    }
+
+    @Override
+    public void onFlowItemClick(String text) {
+        toSearch(text);
+    }
+
+    public void toSearch(String text) {
+        if (mSearchPresenter != null) {
+            mSearchList.scrollToPosition(0);
+            mSearchInputBox.setText(text);
+            mSearchInputBox.setFocusable(true);
+            mSearchInputBox.requestFocus();
+            mSearchInputBox.setSelection(text.length());
+            mSearchInputBox.setSelection(text.length(), text.length());
+            mSearchPresenter.doSearch(text);
+        }
     }
 }
