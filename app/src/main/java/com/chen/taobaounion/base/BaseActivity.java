@@ -1,6 +1,10 @@
 package com.chen.taobaounion.base;
 
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +20,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
+
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0);
+        Paint paint = new Paint();
+        paint.setColorFilter(new ColorMatrixColorFilter(cm));
+        View contentContainer = getWindow().getDecorView();
+        contentContainer.setLayerType(View.LAYER_TYPE_SOFTWARE, paint);
 
         mBind = ButterKnife.bind(this);
         initView();
