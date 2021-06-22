@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.TicketActivity" android:launchMode="singleTop" />
+        <activity android:name="com.tamsiree.rxfeature.activity.ActivityScanerCode" />
     </application>
 
 </manifest>

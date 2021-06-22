@@ -1,8 +1,10 @@
 package com.chen.taobaounion.ui.fragment;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -16,6 +18,7 @@ import com.chen.taobaounion.ui.adapter.HomePagerAdapter;
 import com.chen.taobaounion.utils.PresenterManager;
 import com.chen.taobaounion.view.IHomeCallback;
 import com.google.android.material.tabs.TabLayout;
+import com.tamsiree.rxfeature.activity.ActivityScanerCode;
 
 import butterknife.BindView;
 
@@ -29,6 +32,8 @@ public class HomeFragment extends BaseFragment implements IHomeCallback {
     public ViewPager mHomePager;
     @BindView(R.id.home_search_input_box)
     public View mSearchInputBox;
+    @BindView(R.id.home_scan)
+    public ImageView mScanBtn;
 
     private HomePagerAdapter mHomePagerAdapter;
 
@@ -61,6 +66,13 @@ public class HomeFragment extends BaseFragment implements IHomeCallback {
                 if (activity instanceof IMainActivity) {
                     ((IMainActivity) activity).switch2Search();
                 }
+            }
+        });
+
+        mScanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), ActivityScanerCode.class));
             }
         });
     }
