@@ -14,11 +14,11 @@ import com.chen.taobaounion.base.BaseFragment;
 import com.chen.taobaounion.model.bean.HomeCategories;
 import com.chen.taobaounion.presenter.IHomePresenter;
 import com.chen.taobaounion.ui.activity.IMainActivity;
+import com.chen.taobaounion.ui.activity.*;
 import com.chen.taobaounion.ui.adapter.HomePagerAdapter;
 import com.chen.taobaounion.utils.PresenterManager;
 import com.chen.taobaounion.view.IHomeCallback;
 import com.google.android.material.tabs.TabLayout;
-import com.tamsiree.rxfeature.activity.ActivityScanerCode;
 
 import butterknife.BindView;
 
@@ -72,7 +72,7 @@ public class HomeFragment extends BaseFragment implements IHomeCallback {
         mScanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), ActivityScanerCode.class));
+               getContext().startActivity(new Intent(getContext(), ScanQrCodeActivity.class));
             }
         });
     }
