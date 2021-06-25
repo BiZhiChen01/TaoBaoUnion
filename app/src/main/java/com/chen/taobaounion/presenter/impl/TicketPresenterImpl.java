@@ -84,6 +84,7 @@ public class TicketPresenterImpl implements ITicketPresenter {
 
     @Override
     public void registerViewCallback(ITicketCallback callback) {
+        this.mViewCallback = callback;
         if (mCurrentState != LoadState.NONE) {
             if (mCurrentState == LoadState.SUCCESS) {
                 handleOnTicketLoadedSuccess();
@@ -93,7 +94,6 @@ public class TicketPresenterImpl implements ITicketPresenter {
                 handleOnTicketLoading();
             }
         }
-        this.mViewCallback = callback;
     }
 
     @Override

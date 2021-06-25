@@ -36,6 +36,10 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
 
 import com.chen.taobaounion.R
+import com.chen.taobaounion.model.bean.IBaseInfo
+import com.chen.taobaounion.utils.PresenterManager
+import com.chen.taobaounion.utils.TicketUtil
+import com.chen.taobaounion.utils.ToastUtils
 
 class ScanQrCodeActivity : FragmentActivity() {
 
@@ -340,6 +344,30 @@ class ScanQrCodeActivity : FragmentActivity() {
         val result1 = result.text
         TLog.v("二维码/条形码 扫描结果", result1)
         //处理扫描结果
+        if (result1.contains("taobao.com")) {
+            //属于我们的二维码
+            //PresenterManager.getInstance().ticketPresenter.getTicket("", result1, "");
+            TicketUtil.toTicketPage(this, object : IBaseInfo {
+                override fun getPict_url(): String {
+                    return "";
+                }
+
+                override fun getTitle(): String {
+                    return "";
+                }
+
+                override fun getCoupon_click_url(): String {
+                    return result1;
+                }
+
+                override fun getClick_url(): String {
+                    TODO("Not yet implemented")
+                }
+            });
+        } else {
+            //非法二维码
+            ToastUtils.showToast("当前二维码非法！")
+        }
 //        if (mScanerListener == null) {
 //            RxToast.success(result1)
 //            initDialogResult(result)
